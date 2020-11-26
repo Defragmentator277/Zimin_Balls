@@ -10,14 +10,32 @@
     <canvas id="main">
         
     </canvas>
-    <div>
-        <input type="checkbox" name="check" id="random_set">
+
+    <div id="down_menu">
+        <input type="checkbox" checked="true" name="check" id="random_set">
         <label for="check">Рандом</label>
+        <button id="add">Добавить</button>
         
         <div id="setting">
-            <input type="range" min="1" max="50" name="" id="velX_set">
-            <input type="range" min="1" max="50" name="" id="velY_set">
-
+            <fieldset>
+                <legend id="to_chainge">Минимум</legend>
+                <label for="velX_min">Скорость по X</label>
+                <input type="range" value="1" min="1" max="50" name="velX_min" id="velX_set">
+                <label for="velY_min">Скорость по Y</label>
+                <input type="range" value="1" min="1" max="50" name="velY_min" id="velY_set">
+                <label for="radius_min">Радиус</label>
+                <input type="range" value="1" min="1" max="50" name="radius_min" id="radius_set">
+            </fieldset>
+            <!-- <br> -->
+            <fieldset id="max_set">
+                <legend>Максимум</legend>
+                <label for="velX_max">Скорость по X</label>
+                <input type="range" value="50" min="1" max="50" name="velX_max" id="velX_set_Max">
+                <label for="velY_max">Скорость по Y</label>
+                <input type="range" value="50" min="1" max="50" name="velY_max" id="velY_set_Max">
+                <label for="radius_max">Радиус</label>
+                <input type="range" value="50" min="1" max="50" name="radius_max" id="radius_set_Max">
+            </fieldset>
         </div>
     </div>
 

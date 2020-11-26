@@ -3,8 +3,30 @@ canvas#main
     border: 1px solid black;
 }
 
-/* body
+#down_menu
 {
-    width: 100%;
-} */
+    /* display: flex; */
 
+}
+
+#down_menu > *
+{
+    display: inline-block;
+}
+
+#setting
+{
+    max-height: 150px;
+    overflow: hidden;
+    transition: max-height 1s linear;
+}
+
+#setting > input[type="range"]
+{
+    display: none;
+}
+
+#setting > fieldset:last-child
+{
+    /* display: none; */
+}

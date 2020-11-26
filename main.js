@@ -20,13 +20,13 @@ let count = 15;
  const BACK_COLOR = 'white';
  //
  let MIN_VEL_X = 1;
- let MAX_VEl_X = 10;
+ let MAX_VEl_X = 50;
  //
  let MIN_VEL_Y = 1;
- let MAX_VEl_Y = 10;
+ let MAX_VEl_Y = 50;
  //
- let MIN_RADIUS = 15;
- let MAX_RADIUS = 30;
+ let MIN_RADIUS = 1;
+ let MAX_RADIUS = 50;
 //Main programm
 Start();
 //
@@ -35,8 +35,8 @@ Start();
 function Start()
 {
     //Set width and height
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth - 30;
+    canvas.height = window.innerHeight - 30;
     canvas.style.width = canvas.width;
     canvas.style.height = canvas.height;
     //Attach button`z
@@ -51,31 +51,121 @@ function attachButtons()
 {
     let settings = document.getElementById('setting');
     let rand = document.getElementById('random_set');
+    let add_but = document.getElementById('add');
+     //
     let velX = document.getElementById('velX_set');
     let velY = document.getElementById('velY_set');
+    let radius = document.getElementById('radius_set');
+     //
+    let velX_max = document.getElementById('velX_set_Max');
+    let velY_max = document.getElementById('velY_set_Max');
+    let radius_max = document.getElementById('radius_set_Max');
 
+    add_but.onclick = () => 
+    {
+        balls.push(new Ball(
+            getRandomInt(canvas.width - MAX_RADIUS, MAX_RADIUS),
+            getRandomInt(canvas.height - MAX_RADIUS, MAX_RADIUS),
+            getRandomInt(MAX_VEl_X, MIN_VEL_X),
+            getRandomInt(MAX_VEl_Y, MIN_VEL_Y),
+            getRandomInt(MAX_RADIUS, MIN_RADIUS),
+            getColor()));
+    }
     rand.onchange = () => 
     {
+        let label = document.getElementById('to_chainge');
+        let max_set = document.getElementById('max_set');
         if(rand.checked)
         {
-            settings.style.display = 'none';
+            label.innerText = 'Минимум';
+            max_set.style.display = 'block';
+            ball.forEach(ball => 
+                {
+                    ball.velX = getRandomInt(MAX_VEl_X, MIN_VEL_X);
+                    ball.velY = getRandomInt(MAX_VEl_Y, MIN_VEL_Y);
+                    ball.radius = getRandomInt(MAX_RADIUS, MIN_RADIUS);
+                });
         }
         else
         {
-            settings.style.display = 'block';
+            label.innerText = 'Параметры';
+            max_set.style.display = 'none';
+            // console.log('Without rand')
+            balls.forEach(ball => 
+                {
+                    let velX_val = parseInt(velX.value);
+                    let velY_val = parseInt(velY.value);
+                    let radius_val = parseInt(radius.value);
+                    ball.velX = (ball.velX > 0) ? velX_val : -velX_val;
+                    ball.velY = (ball.velY > 0) ? velY_val : -velY_val;
+                    ball.radius = radius_val;
+                });
         }
     }
-
+     //Min, foundation
     velX.oninput = () =>
     {
         let value = parseInt(velX.value);
-        
+        if(!rand.checked)
+        {
+            balls.forEach(ball => 
+                {
+                    ball.velX = (ball.velX > 0) ? value : -value;
+                });
+        }
+        else
+        {
+            MIN_VEL_X = value;
+            giveRandomVelX();
+        }
     }
-
     velY.oninput = () =>
     {
         let value = parseInt(velY.value);
-        
+        if(!rand.checked)
+        {
+            balls.forEach(ball => 
+                {
+                    ball.velY = (ball.velY > 0) ? value : -value;
+                });
+        }
+        else
+        {
+            MIN_VEL_Y = value;
+            giveRandomVelY();
+        }
+    }
+    radius.oninput = () => 
+    {
+        let value = parseInt(radius.value);
+        if(!rand.checked)
+        {
+            balls.forEach(ball => 
+                {
+                    ball.radius = value;
+                });
+        }
+        else
+        {
+            MIN_RADIUS = value;
+            giveRandomRadius();
+        }
+    }
+     //Max, optional
+    velX_max.oninput = () => 
+    {
+        MAX_VEl_X = parseInt(velX_max.value);
+        giveRandomVelX();
+    }
+    velY_max.oninput = () => 
+    {
+        MAX_VEl_Y = parseInt(velY_max.value);
+        giveRandomVelY();
+    }
+    radius_max.oninput = () =>
+    {
+        MAX_RADIUS = parseInt(radius_max.value);
+        giveRandomRadius();
     }
 }
 
@@ -119,12 +209,12 @@ function drawBall(ball)
 
 function moveBall(ball)
 {
-    if(ball.x + ball.radius >= canvas.width ||
-       ball.x - ball.radius <= 0)
+    if(ball.x + ball.radius + ball.velX >= canvas.width ||
+       ball.x - ball.radius + ball.velX <= 0)
         ball.velX = -ball.velX;
     //
-    if(ball.y + ball.radius >= canvas.height ||
-       ball.y - ball.radius <= 0)
+    if(ball.y + ball.radius + ball.velY >= canvas.height ||
+       ball.y - ball.radius + ball.velY <= 0)
         ball.velY = -ball.velY;
     //
     ball.x += ball.velX;
@@ -165,4 +255,28 @@ function getDistance(x_1, y_1, x_2, y_2)
 function getColor(r = getRandomInt(255, 0), g = getRandomInt(255, 0), b = getRandomInt(255, 0))
 {
     return `rgb(${r}, ${g}, ${b})`;
+}
+
+function giveRandomVelX()
+{
+    balls.forEach(ball => 
+        {
+            ball.velX = getRandomInt(MAX_VEl_X, MIN_VEL_X);
+        });
+}
+
+function giveRandomVelY()
+{
+    balls.forEach(ball => 
+        {
+            ball.velY = getRandomInt(MAX_VEl_Y, MIN_VEL_Y);
+        });
+}
+
+function giveRandomRadius()
+{
+    balls.forEach(ball => 
+        {
+            ball.radius = getRandomInt(MAX_RADIUS, MIN_RADIUS);
+        });
 }
